@@ -18,6 +18,7 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+var messages = [];
 
 module.exports.requestHandler = function(request, response) {
   // setTimeout(function() {
@@ -31,8 +32,11 @@ module.exports.requestHandler = function(request, response) {
   console.log("Serving request type " + request.method + " for url " + request.url);
   if(request.url === '/1/classes/messages'){
     if (request.method === 'POST'){
-      console.log("POST");
-      // request.
+      request.on('data', function(chunk){
+        messages.push(JSON.parse(chunk));
+        console.log(messages);
+      });
+      // console.log(request);
     } else if (request.method ===  'GET'){
       console.log('GET');
     }
@@ -60,6 +64,7 @@ module.exports.requestHandler = function(request, response) {
    * anything back to the client until you do. The string you pass to
    * response.end() will be the body of the response - i.e. what shows
    * up in the browser.*/
-  response.end("Hello, World!");
+  response.write(JSON.stringify(messages));
+  response.end();
   }
 };
