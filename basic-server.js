@@ -1,7 +1,6 @@
 /* Import node's http module: */
 var http = require("http");
 var handler = require('./request-handler.js');
-console.log("test");
 
 /* This is the callback function that will be called each time a
  * client (i.e.. a web browser) makes a request to our server. */

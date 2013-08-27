@@ -1,0 +1,15 @@
+Searching 11 files for "roomName" (case sensitive)
+
+/Users/hackreactor/code/bretthoyer/2013-08-chat-server/client.js:
+    1: var getMessages = function(roomName){
+    3      $.ajax('http://127.0.0.1:8080/1/classes/messages', {
+    4        contentType: 'application/json',
+
+/Users/hackreactor/code/bretthoyer/2013-08-chat-server/index.html:
+   50            var message = $('#message').val();
+   51            sendMessage(username, message);
+   52:           getMessages(roomName)
+   53          });
+   54        });
+
+4 matches across 2 files
