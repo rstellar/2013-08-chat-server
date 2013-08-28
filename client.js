@@ -9,14 +9,13 @@ var headers = defaultCorsHeaders;
 
 
 var getMessages = function(roomName){
-    roomName = roomName || 'messages';
-    $.ajax('http://127.0.0.1:8080/classes/messages', {
+    roomName = roomName || "messages";
+    $.ajax('http://127.0.0.1:8080/classes/' + roomName, {
       contentType: 'application/json',
       headers: headers,
       success: function(data){
-        console.log(data)
+
         var dataChunk = JSON.parse(data);
-        console.log(dataChunk);
         $('#message-list').empty();
         for (var i = 0; i < dataChunk.length; i++){
           $('#message-list').append('<li><span class="username">' + dataChunk[i].username + ': </span>' + dataChunk[i].text + '</li>');
@@ -28,20 +27,21 @@ var getMessages = function(roomName){
     });
 };
 
-var refreshMessages = function(){
-  setInterval(function(){ 
-    getMessages();
+var refreshMessages = function(roomName){
+  setInterval(function(){
+    getMessages(roomName);
   }, 5000);
 };
 
-var sendMessage = function(user, string){
+var sendMessage = function(user, string, roomName){
   // var userNameEncode = window.location.search.substr(window.location.search.indexOf("=") + 1);
   // var userNameString = decodeURIComponent(userNameEncode);
   // var userNameString = sessionStorage.username;
-  $.ajax('http://127.0.0.1:8080/classes/messages',{
+  roomName = roomName || "messages";
+  $.ajax('http://127.0.0.1:8080/classes/' + roomName,{
     type: "POST",
     contentType: 'application/json',
-    data: JSON.stringify({username: user, text: string})
+    data: JSON.stringify({username: user, text: string, roomname: roomName})
   });
 };
 

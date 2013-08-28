@@ -22,9 +22,16 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
-var messages = [];
+var messages = {
+  'message' : []
+};
+
 
 exports.requestHandler = function(request, response) {
+  var afterClasses = '';
+  if(request.url.match(/classes\/(.*)/)){
+    afterClasses = request.url.match(/classes\/(.*)/)[1];
+  }
   console.log("Serving request type " + request.method + " for url " + request.url);
   if(request.url === '/'){
     fs.readFile(__dirname + '/index.html', function (err, data) {
@@ -40,16 +47,21 @@ exports.requestHandler = function(request, response) {
       response.writeHead(200, headers);
       response.end(data);
     });
-  } else if(request.url === '/classes/messages'){
-      if (request.method === 'POST'){
-        request.on('data', function(chunk){
-        messages.unshift(JSON.parse(chunk));
+  } else if(request.url === '/classes/' + afterClasses){
+    if (request.method === 'POST'){
+      console.log(afterClasses);
+      request.on('data', function(chunk){
+        messages[afterClasses] = messages[afterClasses] || [];
+        messages[afterClasses].unshift(JSON.parse(chunk));
         console.log(messages);
+        var headers = defaultCorsHeaders;
+        response.writeHead(201, headers);
         response.end();
       });
     } else if (request.method ===  'GET'){
         console.log('GET');
-        response.end(JSON.stringify(messages));
+        messages[afterClasses] = messages[afterClasses] || [];
+        response.end(JSON.stringify(messages[afterClasses]));
     }
   } else if (request.url === '/css/reset.css'){
       fs.readFile(__dirname + '/css/reset.css', function (err,data) {
@@ -66,7 +78,9 @@ exports.requestHandler = function(request, response) {
       response.end(data);
     });
   } else {
-    response.end("we got it");
+    var headers = defaultCorsHeaders;
+    response.writeHead(404, headers);
+    response.end();
   }
 };
 

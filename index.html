@@ -16,6 +16,11 @@
         Message: <input type="text" value="A/S/L?" id="message"><br>
         <input type="submit">
       </form>
+      <form id = "newChatRoom">
+        <h4>Make a private room!</h4>
+        Room Name:<input type="text" id="roomNameInput"><br>
+        <input type="submit">
+      </form>
      </div>
       <h1>Chat with JSON!</h1>
       <ul id="message-list">
@@ -24,32 +29,19 @@
     <script>
       $(document).ready(function(){
         var username = prompt("What yo name?")
-        getMessages();
-        refreshMessages();
-        // $('form#new-user').on("submit", function(event){
-        //   event.preventDefault();
-        //   var username = $('#new-username').val();
-        //   var password = $('#new-password').val();
-        //   createUser(username, password);
-        //   $('#sign-up').remove();
-        // });
-        // $('form#sign-in').on("submit", function(event){
-        //   event.preventDefault();
-        //   var username = $('#username').val();
-        //   var password = $('#password').val();
-        //   var userEncode = encodeURIComponent(username);
-        //   var passwordEncode = encodeURIComponent(password);
-        //   loginUser(userEncode, passwordEncode);
-        //   $('#main').append('<h4>Hello, ' + username + "!!!" + "</h4>")
-        //   $('#sign-up').remove();
-        //   $('#log-in').remove();
-        //   $('#messaging').show();
-        // });
+        getMessages(window.roomName);
+        refreshMessages(window.roomName);
+
         $('form#messageForm').on("submit", function(event){
           event.preventDefault();
           var message = $('#message').val();
-          sendMessage(username, message);
-          getMessages()
+          sendMessage(username, message, window.roomName);
+          getMessages(window.roomName)
+        });
+
+        $('form#newChatRoom').on("submit", function(event){
+          event.preventDefault();
+          window.roomName = $('#roomNameInput').val();
         });
       });
     </script>
